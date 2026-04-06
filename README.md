@@ -8,6 +8,10 @@ Build a system that helps FIFA World Cup 2026 fans plan optimal travel routes be
 
 See [CHALLENGE.md](./CHALLENGE.md) for `The Scenario` and full instructions.
 
+**NOTE**: Clone this repository and copy the contents into a new repository for your account. Please share your Github URL when you are done. 
+
+We recommend spending a maximum 2-3 hours on the challenge (excluding setup); however the time spent is entirely up to the individual.
+
 ## A Note on AI Assistance
 
 We encourage the use of AI tools (GitHub Copilot, ChatGPT, Claude, etc.) to help you complete these tasks — this reflects how modern developers work.
