@@ -25,7 +25,7 @@ cities_bp = Blueprint('cities', __name__)
 #
 # ============================================================
 
-@cities_bp.route('/', methods = ['GET'])
+@cities_bp.route('', methods = ['GET'])
 def get_all():
     # TODO: Replace with your implementation (YOUR TASK #1)
     cities = City.query.all() # Queries the seeded data from the database and applies it to the variable cities
