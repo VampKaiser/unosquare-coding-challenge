@@ -55,11 +55,12 @@ class TestNearestNeighbourStrategy:
         # Arrange: Create an empty array of matches
         # Act: Call self.strategy.optimise([])
         # Assert: Verify the result has empty stops and totalDistance = 0
-        matches = []
-        result = self.strategy.optimise(matches)
-        assert 'stops' in result, "Result should have 'stops'"
-        assert result['totalDistance'] == 0, "Total distance should be zero"
-        assert len(result['stops']) == 0, "There should be 0 stops in the route"
+        matches = [] # Creates an empty array of matches to test the case where no matches are provided.
+        result = self.strategy.optimise(matches) # Calls the optimise method of the strategy with the empty matches and stores result.
+        assert 'stops' in result, "Result should have 'stops'" # Asserts that the results contains 'stops' as a key.
+        assert result['totalDistance'] == 0, "Total distance should be zero" # Asserts that the total distance of the result is equal to 0.
+        assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'" # Asserts that the strategy used is nearest-neighbour.
+        assert len(result['stops']) == 0, "There should be 0 stops in the route" # Asserts that there are 0 stops in the route.
 
         # pytest.fail('Test not implemented')
 
@@ -69,16 +70,16 @@ class TestNearestNeighbourStrategy:
         # Arrange: Create an array with a single match
         # Act: Call self.strategy.optimise(matches)
         # Assert: Verify totalDistance = 0 and len(stops) = 1
-        matches = [
+        matches = [ # Creates an array with a single match to test the case where only one match is provided.
             {
                 'match_id': 'match-1',
                 'kickoff': '2024-11-01T15:00:00Z',
                 'city': {'name': 'CityA', 'latitude': 40.7128, 'longitude': -74.0060}
             }
         ]
-        result = self.strategy.optimise(matches)
-        assert len(result['stops']) == 1, "There should be 1 stop in the route"
-        assert result['totalDistance'] == 0, "Total distance should be zero for a single match"
-        assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'"
-        
+        result = self.strategy.optimise(matches) # Calls the optimise method of the strategy with the single match and stores result.
+        assert len(result['stops']) == 1, "There should be 1 stop in the route" # Asserts that there is 1 stop in the route.
+        assert result['totalDistance'] == 0, "Total distance should be zero for a single match" # Asserts that the total distance of the result is equal to 0 for a single match.
+        assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'" # Asserts that the strategy used is nearest-neighbour.
+
         # pytest.fail('Test not implemented')
