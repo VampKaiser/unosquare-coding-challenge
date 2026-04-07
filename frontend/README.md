@@ -5,6 +5,7 @@
 ### Node.js (v20 or higher)
 
 **macOS:**
+
 ```bash
 # Using Homebrew
 brew install node
@@ -85,8 +86,8 @@ Complete the TODO in the popup to render match details for each stop!
 
 ## Nice to Have — Unit Tests
 
-| File | What to Implement |
-|------|-------------------|
+| File                          | What to Implement                     |
+| ----------------------------- | ------------------------------------- |
 | `__tests__/RouteMap.test.tsx` | Unit tests for the RouteMap component |
 
 Write tests to verify the RouteMap component behaviour:

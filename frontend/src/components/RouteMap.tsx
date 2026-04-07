@@ -32,19 +32,25 @@
  *
  */
 
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
-import { LatLngExpression, DivIcon } from 'leaflet';
-import { OptimisedRoute, City, ItineraryStop } from '../types';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
+import { LatLngExpression, DivIcon } from "leaflet";
+import { OptimisedRoute, City, ItineraryStop } from "../types";
 
 // Centre of North America
 const MAP_CENTRE: LatLngExpression = [39, -98];
 
 // Creates a multi-numbered marker icon (e.g., "2, 4" for stops within same City)
 function createMultiNumberedIcon(numbers: number[]): DivIcon {
-  const label = numbers.join(', ');
+  const label = numbers.join(", ");
   const width = Math.max(28, 12 + label.length * 8);
   return new DivIcon({
-    className: 'numbered-marker',
+    className: "numbered-marker",
     html: `<div class="marker-number marker-multi">${label}</div>`,
     iconSize: [width, 28],
     iconAnchor: [width / 2, 14],
@@ -54,7 +60,7 @@ function createMultiNumberedIcon(numbers: number[]): DivIcon {
 // Creates a "Start" marker icon
 function createStartIcon(): DivIcon {
   return new DivIcon({
-    className: 'numbered-marker',
+    className: "numbered-marker",
     html: `<div class="marker-start">Start</div>`,
     iconSize: [40, 28],
     iconAnchor: [20, 14],
@@ -62,7 +68,9 @@ function createStartIcon(): DivIcon {
 }
 
 // Group stops by city
-function groupStopsByCity(stops: ItineraryStop[]): Map<string, ItineraryStop[]> {
+function groupStopsByCity(
+  stops: ItineraryStop[],
+): Map<string, ItineraryStop[]> {
   const grouped = new Map<string, ItineraryStop[]>();
   stops.forEach((stop) => {
     const cityId = stop.city.id;
@@ -104,7 +112,7 @@ function RouteMap({ route, originCity }: RouteMapProps) {
     <MapContainer
       center={MAP_CENTRE}
       zoom={3}
-      style={{ height: '400px', width: '100%', borderRadius: '8px' }}
+      style={{ height: "400px", width: "100%", borderRadius: "8px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -120,27 +128,38 @@ function RouteMap({ route, originCity }: RouteMapProps) {
           <Popup>
             <strong>Start: {originCity.name}</strong>
             <br />
-            <span style={{ fontSize: '0.85em', color: '#666' }}>{originCity.country}</span>
+            <span style={{ fontSize: "0.85em", color: "#666" }}>
+              {originCity.country}
+            </span>
           </Popup>
         </Marker>
       )}
 
-      {Array.from(groupStopsByCity(route.stops).entries()).map(([cityId, stops]) => {
-        const firstStop = stops[0];
-        const stopNumbers = stops.map((s) => s.stopNumber);
+      {Array.from(groupStopsByCity(route.stops).entries()).map(
+        ([cityId, stops]) => {
+          const firstStop = stops[0];
+          const stopNumbers = stops.map((s) => s.stopNumber);
 
-        return (
-          <Marker
-            key={cityId}
-            position={[firstStop.city.latitude, firstStop.city.longitude]}
-            icon={createMultiNumberedIcon(stopNumbers)}
-          >
-            <Popup>
-              <strong>{firstStop.city.name}</strong>
-              <br />
-              <span style={{ fontSize: '0.85em', color: '#666' }}>{firstStop.city.country}</span>
-              <hr style={{ margin: '0.5rem 0', border: 'none', borderTop: '1px solid #ddd' }} />
-              {/* ============================================================
+          return (
+            <Marker
+              key={cityId}
+              position={[firstStop.city.latitude, firstStop.city.longitude]}
+              icon={createMultiNumberedIcon(stopNumbers)}
+            >
+              <Popup>
+                <strong>{firstStop.city.name}</strong>
+                <br />
+                <span style={{ fontSize: "0.85em", color: "#666" }}>
+                  {firstStop.city.country}
+                </span>
+                <hr
+                  style={{
+                    margin: "0.5rem 0",
+                    border: "none",
+                    borderTop: "1px solid #ddd",
+                  }}
+                />
+                {/* ============================================================
                   TODO: Render match details for each stop (YOUR TASK)
                   ============================================================
 
@@ -149,10 +168,37 @@ function RouteMap({ route, originCity }: RouteMapProps) {
                     - <span className="popup-match-number"> for stop number
                     - <span className="popup-match-date"> for the date
               */}
-            </Popup>
-          </Marker>
-        );
-      })}
+                {stops.map(
+                  (
+                    stop /* Iterates through each stop in the city group. */,
+                  ) => (
+                    <div key={stop.stopNumber} className="popup-match">
+                      {" "}
+                      {/* Container for each match's details. */}
+                      <span className="popup-match-number">
+                        {" "}
+                        {/* Displays the stop number. */}
+                        Stop {stop.stopNumber}
+                      </span>
+                      &nbsp;
+                      <span>
+                        {stop.match.homeTeam.name} vs {stop.match.awayTeam.name}{" "}
+                        {/* Displays the team names. */}
+                      </span>
+                      <br />
+                      <span className="popup-match-date">
+                        {" "}
+                        {/* Displays the kickoff date, formatted as a local date string. */}
+                        {new Date(stop.match.kickoff).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ),
+                )}
+              </Popup>
+            </Marker>
+          );
+        },
+      )}
       <Polyline positions={positions} color="#e94560" weight={3} />
     </MapContainer>
   );
