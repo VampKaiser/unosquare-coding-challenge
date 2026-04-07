@@ -83,7 +83,57 @@ class CostCalculator:
         #
         # 8. Return BudgetResult with all results
 
-        raise NotImplementedError("Not implemented — this is your task!")
+        # raise NotImplementedError("Not implemented — this is your task!")
+        ticket_costs = sum(match.get("ticketPrice", 0) for match in matches) # Calculates total ticket costs.
+        
+        flight_costs = 0
+        previous_city_id = origin_city_id
+        for match in matches:
+            current_city_id = match['city']['id']
+            flight_costs += self.get_flight_price(previous_city_id, current_city_id, flight_prices) # Adds flight cost from previous city to current match city.
+            previous_city_id = current_city_id
+        
+        accommodation_costs = 0
+        for i, match in enumerate(matches):
+            current_city = match['city']
+            if i < len(matches) - 1:
+                next_match = matches[i + 1]
+                nights = self.calculate_nights_between(match['kickoff'], next_match['kickoff']) # Calculates nights between current match and next match.
+            else:
+                nights = 1 # Assume 1 night for the last match
+            accommodation_costs += nights * current_city.get('accommodationPerNight', 0) # Adds accommodation cost for the current city based on nights stayed and accommodation rate.
+
+        total_cost = ticket_costs + flight_costs + accommodation_costs # Calculates total cost by summing ticket, flight, and accommodation costs.
+
+        countries_visited = self.get_countries_visited(matches) # Gets list of unique countries visited from matches.
+        missing_countries = self.get_missing_countries(countries_visited) # Checks which required countries are missing from the visited countries.
+
+        feasible = True # Initializes feasible to True, and will set to False if any constraints are violated.
+
+        if total_cost > budget: # If total cost exceeds budget, set feasible to False and minimum budget required to the calculated total cost.
+            feasible = False
+        minimum_budget_required = total_cost # Sets minimum budget required to the calculated total cost.
+
+        suggestions = [] # Initializes an empty list for suggestions.
+        if total_cost > budget: # If the trip is not feasible, generate suggestions to reduce cost.
+            feasible = False
+            suggestions += self.generate_suggestions(matches, total_cost, budget) # Generates cost-saving suggestions based on the matches, total cost, and budget.
+            if missing_countries: # If there are missing countries, add a suggestion to cover those countries.
+                feasible = False
+                suggestions.append(
+                    f"Your trip is missing matches in the following countries: {', '.join(missing_countries)}. "
+                    "Consider adding matches in those countries to meet the requirement."
+                )
+        
+        return { # Returns a BudgetResult dict containing feasibility, total cost, breakdown of costs, minimum budget required, and suggestions for improvement if not feasible.
+            'feasible': feasible,
+            'totalCost': total_cost,
+            'ticketCosts': ticket_costs,
+            'flightCosts': flight_costs,
+            'accommodationCosts': accommodation_costs,
+            'minimumBudgetRequired': minimum_budget_required,
+            'suggestions': suggestions
+        }
 
     # ============================================================
     # HELPER METHODS (Already implemented for you)

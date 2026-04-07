@@ -27,8 +27,8 @@ def create():
         itinerary_stop = ItineraryStop(
             itinerary_id=itinerary.id,
             stop_number=stop['stopNumber'],
-            match_id=stop['match']['id'],
-            city_id=stop['city']['id'],
+            match_id=stop['matchId'],
+            city_id=stop['cityId'],
             distance_from_previous=stop.get('distanceFromPrevious', 0),
         )
         db.session.add(itinerary_stop)
