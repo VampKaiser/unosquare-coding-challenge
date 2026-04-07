@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from app.models.match import Match
 from app.models.flight_price import FlightPrice
 from app.strategies.nearest_neighbour_strategy import NearestNeighbourStrategy
+from app.strategies.date_only_strategy import DateOnlyStrategy
 # Tip: You can also import DateOnlyStrategy to compare results
 # from app.strategies.date_only_strategy import DateOnlyStrategy
 
@@ -39,7 +40,12 @@ optimise_bp = Blueprint('optimise', __name__)
 @optimise_bp.route('/optimise', methods=['POST'])
 def optimise():
     # TODO: Replace with your implementation (YOUR TASK #3)
-    return jsonify({}), 200
+    match_ids = request.json.get('matchIds', [])
+    matches = Match.query.filter(Match.id.in_(match_ids)).all()
+    match_dicts = [match.to_dict() for match in matches]
+    strategy = NearestNeighbourStrategy()
+    optimised_route = strategy.optimise(match_dicts)
+    return jsonify(optimised_route), 200
 
 
 # ============================================================
