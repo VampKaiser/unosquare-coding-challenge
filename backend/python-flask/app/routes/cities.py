@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Flask, Blueprint, jsonify
 from app.models.city import City
 
 cities_bp = Blueprint('cities', __name__)
@@ -25,7 +25,9 @@ cities_bp = Blueprint('cities', __name__)
 #
 # ============================================================
 
-@cities_bp.route('/')
+@cities_bp.route('/', methods = ['GET'])
 def get_all():
     # TODO: Replace with your implementation (YOUR TASK #1)
-    return jsonify()
+    cities = City.query.all() # Queries the seeded data from the database and applies it to the variable cities
+    list_cities = [city.to_dict() for city in cities] # Converts the seeded data into dictionaries for each city and applies to the variable list_cities
+    return jsonify(list_cities), 200 # Returns the list as a JSON response with a status code of 200

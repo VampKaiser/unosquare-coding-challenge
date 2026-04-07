@@ -26,10 +26,12 @@ matches_bp = Blueprint('matches', __name__)
 #
 # ============================================================
 
-@matches_bp.route('', methods=['GET'])
+@matches_bp.route('/api/matches', methods=['GET'])
 def get_matches():
     # TODO: Replace with your implementation (YOUR TASK #2)
-    return jsonify([]), 200
+    matches = Match.query.all()  # Replace with filtered query
+    list_matches = [match.to_dict() for match in matches]
+    return jsonify(list_matches), 200
 
 
 # ============================================================
