@@ -41,7 +41,9 @@ class TestNearestNeighbourStrategy:
                 'city': {'name': 'CityC', 'latitude': 51.5074, 'longitude': -0.1278}
             }
         ]
+        
         result = self.strategy.optimise(matches) # Calls the optimise method of the strategy with the matches and stores result.
+
         assert 'stops' in result, "Result should have 'stops'" # Asserts that the results contains 'stops' as a key.
         assert result['totalDistance'] > 0, "Total distance should be positive" # Asserts that the total distance of the result is greater than 0.
         assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'" # Asserts that the strategy used is nearest-neighbour.
@@ -56,7 +58,9 @@ class TestNearestNeighbourStrategy:
         # Act: Call self.strategy.optimise([])
         # Assert: Verify the result has empty stops and totalDistance = 0
         matches = [] # Creates an empty array of matches to test the case where no matches are provided.
+
         result = self.strategy.optimise(matches) # Calls the optimise method of the strategy with the empty matches and stores result.
+
         assert 'stops' in result, "Result should have 'stops'" # Asserts that the results contains 'stops' as a key.
         assert result['totalDistance'] == 0, "Total distance should be zero" # Asserts that the total distance of the result is equal to 0.
         assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'" # Asserts that the strategy used is nearest-neighbour.
@@ -77,7 +81,9 @@ class TestNearestNeighbourStrategy:
                 'city': {'name': 'CityA', 'latitude': 40.7128, 'longitude': -74.0060}
             }
         ]
+
         result = self.strategy.optimise(matches) # Calls the optimise method of the strategy with the single match and stores result.
+
         assert len(result['stops']) == 1, "There should be 1 stop in the route" # Asserts that there is 1 stop in the route.
         assert result['totalDistance'] == 0, "Total distance should be zero for a single match" # Asserts that the total distance of the result is equal to 0 for a single match.
         assert result['strategy'] == 'nearest-neighbour', "Strategy should be 'nearest-neighbour'" # Asserts that the strategy used is nearest-neighbour.

@@ -20,6 +20,7 @@ def create():
         strategy=data['strategy'],
         total_distance=data['totalDistance'],
     )
+    
     db.session.add(itinerary)
     db.session.flush()  # Get the ID before committing
 

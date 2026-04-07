@@ -37,6 +37,7 @@ def get_matches():
         query = query.filter(Match.city_id == city) # If the city query parameter is present, filters the matches by the city ID
     if kickoff:
         query = query.filter(Match.kickoff == kickoff)# If the kickoff query parameter is present, filters the matches by the kickoff date
+    
     query = query.order_by(Match.kickoff) # Orders the match results by the kickoff date
     matches = query.all() # Executes the query and applies the results to the matches variable
     matches_list = [match.to_dict() for match in matches] # Converts the results into a list of dictionaries and applies it to the matches_list variable

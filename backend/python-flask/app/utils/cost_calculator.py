@@ -84,10 +84,13 @@ class CostCalculator:
         # 8. Return BudgetResult with all results
 
         # raise NotImplementedError("Not implemented — this is your task!")
+        
         ticket_costs = sum(match.get("ticketPrice", 0) for match in matches) # Calculates total ticket costs.
         
         flight_costs = 0
+
         previous_city_id = origin_city_id
+
         for match in matches:
             current_city_id = match['city']['id']
             flight_costs += self.get_flight_price(previous_city_id, current_city_id, flight_prices) # Adds flight cost from previous city to current match city.
